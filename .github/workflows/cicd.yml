@@ -9,17 +9,17 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build_and_deploy:
     name: Deploy
-    runs-on: [auto, medium]
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code ( Push )
-        uses: actions/checkout@v3
+      - name: install
+        run: yarn
 
-      - name: Install Node Dependencies
-        run: yarn install --frozen-lockfile --prefer-offline
-
-      - name: Deploy
+      - name: build and deploy
         run: yarn deploy
