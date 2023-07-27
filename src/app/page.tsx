@@ -1,8 +1,9 @@
 import puppeteer from 'puppeteer';
+import chromium from 'chrome-aws-lambda';
 import * as cheerio from 'cheerio';
 
 const getBikepackingEvents = async () => {
-  const browser = await puppeteer.launch({
+  const browser = await chromium.puppeteer.launch({
     headless: 'new',
   });
   const page = await browser.newPage();
