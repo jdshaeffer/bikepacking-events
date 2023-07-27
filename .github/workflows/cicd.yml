@@ -13,7 +13,7 @@ on:
 jobs:
   build_and_deploy:
     name: Deploy
-    runs-on: [small]
+    runs-on: [medium]
     steps:
       - name: Checkout Code ( Push )
         uses: actions/checkout@v3
