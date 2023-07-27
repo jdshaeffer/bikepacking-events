@@ -10,7 +10,10 @@ const LOCAL_CHROME_EXECUTABLE =
 export async function GET(req: NextRequest) {
   const browser = await puppeteer.launch({
     args: chromium.args,
-    executablePath: LOCAL_CHROME_EXECUTABLE || (await chromium.executablePath),
+    executablePath:
+      process.env.NODE_ENV === 'development'
+        ? LOCAL_CHROME_EXECUTABLE
+        : await chromium.executablePath,
     headless: true,
   });
 
