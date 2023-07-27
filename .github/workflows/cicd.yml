@@ -1,0 +1,26 @@
+name: CI/CD
+run-name: '@${{ github.actor }} ( ${{ github.event_name }} ) : ${{ github.ref_name }}'
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_deploy:
+    name: Deploy
+    runs-on: [small]
+    needs: [build]
+    steps:
+      - name: Checkout Code ( Push )
+        uses: actions/checkout@v3
+
+      - name: Install Node Dependencies
+        run: yarn install --frozen-lockfile --prefer-offline
+
+      - name: Deploy
+        run: yarn deploy
