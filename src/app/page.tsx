@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import * as cheerio from 'cheerio';
 
 const getBikepackingEvents = async () => {
   const browser = await puppeteer.launch({
@@ -7,10 +8,28 @@ const getBikepackingEvents = async () => {
   const page = await browser.newPage();
   await page.goto('https://bikepacking.com/events');
 
-  const events = await page.evaluate(() =>
-    // Array.from(document.querySelectorAll('div[id^="post"]'), (e) => )
-    document.querySelectorAll('div[id^="post"]')
+  const eventsHTML = await page.evaluate(() =>
+    Array.from(
+      document.querySelectorAll('div[id^="post-"]'),
+      (e) => e.innerHTML
+    )
   );
+
+  const events = eventsHTML.map((event) => {
+    const $ = cheerio.load(event);
+    const dateAndPrice = $('div.event-list-when');
+    const [category, location] = $('div.event-list-where').text().split(' / ');
+    return {
+      title: $('h2').text(),
+      eventUrl: $('a').attr('href'),
+      imgSrc: $('img').attr('src'),
+      date: dateAndPrice.find('span.tribe-event-date-start').text(),
+      price: dateAndPrice.find('span:not(.tribe-event-date-start)').text(),
+      category,
+      location,
+      detail: $('p').text(),
+    };
+  });
 
   await browser.close();
   return events;
@@ -18,7 +37,7 @@ const getBikepackingEvents = async () => {
 
 export default async function Home() {
   const events = await getBikepackingEvents();
-  // console.log('event div:', events);
+  console.log(events);
 
   return (
     <main>
