@@ -14,7 +14,6 @@ jobs:
   build_and_deploy:
     name: Deploy
     runs-on: [small]
-    needs: [build]
     steps:
       - name: Checkout Code ( Push )
         uses: actions/checkout@v3
