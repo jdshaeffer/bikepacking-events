@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 
+const devPath = 'http://localhost:8000/api/events';
+const prodAPIPath = 'https://nycmud.com/api/events';
+const prodFEPath = 'https://jdshaeffer.github.io/bikepacking-events/';
+
 interface BikepackingEvent {
   title: string;
   distance: string;
@@ -23,7 +27,9 @@ function App() {
     } else {
       (async () => {
         setLoading(true);
-        const res = await fetch('http://localhost:8000/api/events');
+        const res = await fetch(
+          window.location.href === prodFEPath ? prodAPIPath : devPath
+        );
         const eventsJson = await res.json();
         setEvents(eventsJson);
         setLoading(false);
