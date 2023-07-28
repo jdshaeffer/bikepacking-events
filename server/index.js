@@ -42,11 +42,7 @@ const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const port = 8000;
 app.use((0, cors_1.default)({
-    origin: [
-        'http://localhost:3000',
-        'https://jdshaeffer.github.io/bikepacking-events/',
-    ],
-    credentials: true,
+    origin: ['http://localhost:3000', 'https://jdshaeffer.github.io/'],
 }));
 app.get('/api/events', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const getBikepackingEvents = () => __awaiter(void 0, void 0, void 0, function* () {
