@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/bikepacking-events/static/css/main.156221bf.css",
-    "main.js": "/bikepacking-events/static/js/main.021b0739.js",
+    "main.js": "/bikepacking-events/static/js/main.2a59909e.js",
     "index.html": "/bikepacking-events/index.html",
     "main.156221bf.css.map": "/bikepacking-events/static/css/main.156221bf.css.map",
-    "main.021b0739.js.map": "/bikepacking-events/static/js/main.021b0739.js.map"
+    "main.2a59909e.js.map": "/bikepacking-events/static/js/main.2a59909e.js.map"
   },
   "entrypoints": [
     "static/css/main.156221bf.css",
-    "static/js/main.021b0739.js"
+    "static/js/main.2a59909e.js"
   ]
 }
