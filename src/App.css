@@ -1,14 +1,23 @@
-.App {
-  text-align: center;
-  background-color: #282c34;
+.app {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
 
-.App-link {
+.app-header {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.events {
+  text-align: left;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20vh;
+}
+
+.app-link {
   color: #61dafb;
 }
