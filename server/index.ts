@@ -8,7 +8,10 @@ const port = 8000;
 
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: [
+      'http://localhost:3000',
+      'https://jdshaeffer.github.io/bikepacking-events/',
+    ],
     credentials: true,
   })
 );
@@ -63,5 +66,5 @@ app.get('/api/events', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log('running server on 8000');
+  console.log(`running server on ${port}`);
 });
