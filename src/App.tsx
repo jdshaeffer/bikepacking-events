@@ -28,7 +28,8 @@ function App() {
       (async () => {
         setLoading(true);
         const res = await fetch(
-          window.location.href === prodFEPath ? prodAPIPath : devPath
+          window.location.href === prodFEPath ? prodAPIPath : devPath,
+          { mode: 'cors' }
         );
         const eventsJson = await res.json();
         setEvents(eventsJson);
