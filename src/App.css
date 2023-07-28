@@ -16,8 +16,42 @@
   align-items: center;
   justify-content: center;
   margin-left: 20vh;
+  margin-right: 20vh;
 }
 
-.app-link {
-  color: #61dafb;
+.event {
+  padding: 10px;
+  border: 2px solid white;
+  border-radius: 10px;
+  margin-bottom: 2vh;
+}
+
+.event:hover {
+  background-color: #373c47;
+}
+
+.title {
+  margin-top: -1vh
+}
+
+.category-location {
+  font-size: calc(1px + 2vmin);
+  color: #E94152
+}
+
+.distance {
+  color: #E94152
+}
+
+.date-price {
+  font-size: calc(5px + 2vmin);
+}
+
+.detail {
+  font-size: calc(2px + 2vmin);
+}
+
+.link {
+  color: white;
+  text-decoration: none;
 }

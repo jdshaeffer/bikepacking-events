@@ -34,10 +34,17 @@ app.get('/api/events', async (req, res) => {
       const [category, location] = $('div.event-list-where')
         .text()
         .split(' / ');
+      const titleAndDistance = $('h2').text().split('(');
+      const distance = titleAndDistance.pop()!.slice(0, -1);
+      const title =
+        titleAndDistance.length > 1
+          ? `${titleAndDistance[0]}(${titleAndDistance[1]}`
+          : titleAndDistance[0];
+
       return {
-        title: $('h2').text(),
+        title,
+        distance,
         eventUrl: $('a').attr('href'),
-        imgSrc: $('img').attr('src'),
         date: dateAndPrice.find('span.tribe-event-date-start').text(),
         price: dateAndPrice.find('span:not(.tribe-event-date-start)').text(),
         category,
