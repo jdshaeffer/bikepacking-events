@@ -8,7 +8,7 @@ const port = 8000;
 
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://jdshaeffer.github.io/'],
+    origin: ['http://localhost:3000', 'https://jdshaeffer.github.io'],
   })
 );
 

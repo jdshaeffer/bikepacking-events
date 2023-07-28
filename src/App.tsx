@@ -3,7 +3,7 @@ import './App.css';
 
 const devPath = 'http://localhost:8000/api/events';
 const prodAPIPath = 'https://nycmud.com/api/events';
-const prodFEPath = 'https://jdshaeffer.github.io/bikepacking-events/';
+const prodFEPath = 'https://jdshaeffer.github.io/bikepacking-events';
 
 interface BikepackingEvent {
   title: string;
