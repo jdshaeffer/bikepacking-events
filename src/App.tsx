@@ -59,7 +59,7 @@ function App() {
                   <span className='distance'>{event.distance}</span>
                 </p>
                 <p className='date-price'>
-                  {event.date} {event.price != '' ? `/ ${event.price}` : ''}
+                  {event.date} {event.price !== '' ? `/ ${event.price}` : ''}
                 </p>
                 <p className='detail'>{event.detail}</p>
               </div>
