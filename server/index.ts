@@ -10,6 +10,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
+      'https://jdshaeffer.github.io/',
       'https://jdshaeffer.github.io/bikepacking-events/',
     ],
     credentials: true,
