@@ -19,25 +19,36 @@ interface BikepackingEvent {
 function App() {
   const [events, setEvents] = useState<BikepackingEvent[]>([]);
   const [loading, setLoading] = useState(false);
+  const [waitingStr, setWaitingStr] = useState('...');
+
+  const getBikepackingEvents = async () => {
+    setLoading(true);
+    const res = await fetch(
+      window.location.href === prodFEPath ? prodAPIPath : devPath,
+      { mode: 'cors' }
+    );
+    const eventsJson = await res.json();
+    setEvents(eventsJson);
+    setLoading(false);
+    localStorage.setItem('events', JSON.stringify(eventsJson));
+  };
 
   useEffect(() => {
     if (localStorage.getItem('events')) {
       const eventsJsonString = '' + localStorage.getItem('events');
       setEvents(JSON.parse(eventsJsonString));
     } else {
-      (async () => {
-        setLoading(true);
-        const res = await fetch(
-          window.location.href === prodFEPath ? prodAPIPath : devPath,
-          { mode: 'cors' }
-        );
-        const eventsJson = await res.json();
-        setEvents(eventsJson);
-        setLoading(false);
-        localStorage.setItem('events', JSON.stringify(eventsJson));
-      })();
+      getBikepackingEvents();
     }
   }, []);
+
+  useEffect(() => {
+    if (loading) {
+      setInterval(() => {
+        setWaitingStr(waitingStr + '.');
+      }, 500);
+    }
+  });
 
   return (
     <div className='app'>
@@ -53,10 +64,10 @@ function App() {
       </div>
       <div className='events'>
         {loading ? (
-          <p>loading events from bikepacking.com ...</p>
+          <p>loading events from bikepacking.com{waitingStr}</p>
         ) : events ? (
           events.map((event) => (
-            <a className='link' href={event.eventUrl}>
+            <a key={event.eventUrl} className='link' href={event.eventUrl}>
               <div key={event.title} className='event'>
                 <p className='category-location'>
                   {event.category} / {event.location}
