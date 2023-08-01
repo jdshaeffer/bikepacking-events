@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import DistanceFilter from './components/DistanceFilter';
 import './App.css';
 
 const devPath = 'http://localhost:8000/api/events';
@@ -16,22 +17,33 @@ interface BikepackingEvent {
   detail: string;
 }
 
-function App() {
+const App = () => {
   const [events, setEvents] = useState<BikepackingEvent[]>([]);
   const [loading, setLoading] = useState(false);
   const [waitingStr, setWaitingStr] = useState('...');
+
+  const [location, setLocation] = useState<string>();
+  const [distance, setDistance] = useState<number>();
 
   const getBikepackingEvents = async () => {
     setLoading(true);
     const res = await fetch(
       window.location.href === prodFEPath ? prodAPIPath : devPath,
-      { mode: 'cors' }
+      { mode: 'cors' },
     );
     const eventsJson = await res.json();
     setEvents(eventsJson);
     setLoading(false);
     localStorage.setItem('events', JSON.stringify(eventsJson));
   };
+
+  useEffect(() => {
+    if (loading) {
+      setInterval(() => {
+        setWaitingStr(waitingStr + '.');
+      }, 500);
+    }
+  });
 
   useEffect(() => {
     if (localStorage.getItem('events')) {
@@ -42,25 +54,42 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    if (loading) {
-      setInterval(() => {
-        setWaitingStr(waitingStr + '.');
-      }, 500);
-    }
-  });
-
   return (
     <div className='app'>
       <div className='app-header'>
         <h1>bikepacking events</h1>
       </div>
       <div className='filters'>
-        <div className='title-field'></div>
-        <div className='distance-group'></div>
-        <div className='location-group'></div>
-        <div className='price-group'></div>
-        <div className='category-group'></div>
+        <div className='filter'>
+          <p>distance:</p>
+          <DistanceFilter
+            callback={(distance: number) => setDistance(distance)}
+          />
+        </div>
+        <div className='filter'>
+          <p>location:</p>
+          <DistanceFilter
+            callback={(distance: number) => setDistance(distance)}
+          />
+        </div>
+        <div className='filter'>
+          <p>price:</p>
+          <DistanceFilter
+            callback={(distance: number) => setDistance(distance)}
+          />
+        </div>
+        <div className='filter'>
+          <p>date:</p>
+          <DistanceFilter
+            callback={(distance: number) => setDistance(distance)}
+          />
+        </div>
+        <div className='filter'>
+          <p>category:</p>
+          <DistanceFilter
+            callback={(distance: number) => setDistance(distance)}
+          />
+        </div>
       </div>
       <div className='events'>
         {loading ? (
@@ -89,6 +118,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;

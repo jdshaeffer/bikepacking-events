@@ -9,7 +9,7 @@ const port = 8000;
 app.use(
   cors({
     origin: ['http://localhost:3000', 'https://jdshaeffer.github.io'],
-  })
+  }),
 );
 
 app.get('/api/events', async (req, res) => {
@@ -23,8 +23,8 @@ app.get('/api/events', async (req, res) => {
     const eventsHTML = await page.evaluate(() =>
       Array.from(
         document.querySelectorAll('div[id^="post-"]'),
-        (e) => e.innerHTML
-      )
+        (e) => e.innerHTML,
+      ),
     );
 
     const events = eventsHTML.map((event) => {
