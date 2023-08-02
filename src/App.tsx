@@ -17,13 +17,22 @@ interface BikepackingEvent {
   detail: string;
 }
 
+// TODO: refresh events in background - load localstorage and then get new events... avoid repaint though - maybe just refresh button?
+// TODO: actual filtering logic
+// TODO: rest of filters
+// TODO: ability to sort by filter category
+// TODO: next/prev button - just returns that page's set of events
 const App = () => {
   const [events, setEvents] = useState<BikepackingEvent[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<BikepackingEvent[]>([]);
   const [loading, setLoading] = useState(false);
   const [waitingStr, setWaitingStr] = useState('...');
 
-  const [location, setLocation] = useState<string>();
   const [distance, setDistance] = useState<number>();
+  const [location, setLocation] = useState<string>();
+  const [season, setSeason] = useState<string>();
+  const [price, setPrice] = useState<string>();
+  const [category, setCategory] = useState<string>();
 
   const getBikepackingEvents = async () => {
     setLoading(true);
@@ -33,6 +42,7 @@ const App = () => {
     );
     const eventsJson = await res.json();
     setEvents(eventsJson);
+    setFilteredEvents(eventsJson);
     setLoading(false);
     localStorage.setItem('events', JSON.stringify(eventsJson));
   };
@@ -49,15 +59,36 @@ const App = () => {
     if (localStorage.getItem('events')) {
       const eventsJsonString = '' + localStorage.getItem('events');
       setEvents(JSON.parse(eventsJsonString));
+      setFilteredEvents(JSON.parse(eventsJsonString));
     } else {
       getBikepackingEvents();
     }
   }, []);
 
+  useEffect(() => {
+    if (distance) {
+      const eventsFilteredByDistance = events.filter((event) => {
+        if (event.distance) {
+          const d = +event.distance.split('/')[0].slice(0, -3);
+          if (d <= distance) {
+            return event;
+          }
+        }
+      });
+      setFilteredEvents(eventsFilteredByDistance);
+    }
+  }, [distance]);
+
   return (
     <div className='app'>
       <div className='app-header'>
+        <span className='emoji' role='img' aria-label='bicycle emoji'>
+          <h1>{String.fromCodePoint(0x1f6b5)}</h1>
+        </span>
         <h1>bikepacking events</h1>
+        <span className='emoji' role='img' aria-label='bicycle emoji'>
+          <h1>{String.fromCodePoint(0x1f6b5)}</h1>
+        </span>
       </div>
       <div className='filters'>
         <div className='filter'>
@@ -73,13 +104,13 @@ const App = () => {
           />
         </div>
         <div className='filter'>
-          <p>price:</p>
+          <p>season:</p>
           <DistanceFilter
             callback={(distance: number) => setDistance(distance)}
           />
         </div>
         <div className='filter'>
-          <p>date:</p>
+          <p>price:</p>
           <DistanceFilter
             callback={(distance: number) => setDistance(distance)}
           />
@@ -94,8 +125,8 @@ const App = () => {
       <div className='events'>
         {loading ? (
           <p>loading events from bikepacking.com{waitingStr}</p>
-        ) : events ? (
-          events.map((event) => (
+        ) : filteredEvents ? (
+          filteredEvents.map((event) => (
             <a key={event.eventUrl} className='link' href={event.eventUrl}>
               <div key={event.title} className='event'>
                 <p className='category-location'>
