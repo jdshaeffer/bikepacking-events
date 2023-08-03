@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import DistanceFilter from './components/DistanceFilter';
+// import SeasonFilter from './components/SeasonFilter';
+import LocationFilter from './components/LocationFilter';
 import './App.css';
 
 const devPath = 'http://localhost:8000/api/events';
 const prodAPIPath = 'https://nycmud.com/api/events';
 const prodFEPath = 'https://jdshaeffer.github.io/bikepacking-events';
 
-interface BikepackingEvent {
+export interface BikepackingEvent {
   title: string;
   distance: string;
   eventUrl: string;
@@ -18,21 +20,29 @@ interface BikepackingEvent {
 }
 
 // TODO: refresh events in background - load localstorage and then get new events... avoid repaint though - maybe just refresh button?
-// TODO: actual filtering logic
 // TODO: rest of filters
 // TODO: ability to sort by filter category
 // TODO: next/prev button - just returns that page's set of events
 const App = () => {
   const [events, setEvents] = useState<BikepackingEvent[]>([]);
+  const [filteredDistanceEvents, setFilteredDistanceEvents] = useState<
+    Set<BikepackingEvent>
+  >(new Set());
+  const [filteredLocationEvents, setFilteredLocationEvents] = useState<
+    Set<BikepackingEvent>
+  >(new Set());
+  const [filteredSeasonEvents, setFilteredSeasonEvents] = useState<
+    Set<BikepackingEvent>
+  >(new Set());
+  const [filteredPriceEvents, setFilteredPriceEvents] = useState<
+    Set<BikepackingEvent>
+  >(new Set());
+  const [filteredCategoryEvents, setFilteredCategoryEvents] = useState<
+    Set<BikepackingEvent>
+  >(new Set());
   const [filteredEvents, setFilteredEvents] = useState<BikepackingEvent[]>([]);
   const [loading, setLoading] = useState(false);
   const [waitingStr, setWaitingStr] = useState('...');
-
-  const [distance, setDistance] = useState<number>();
-  const [location, setLocation] = useState<string>();
-  const [season, setSeason] = useState<string>();
-  const [price, setPrice] = useState<string>();
-  const [category, setCategory] = useState<string>();
 
   const getBikepackingEvents = async () => {
     setLoading(true);
@@ -42,7 +52,11 @@ const App = () => {
     );
     const eventsJson = await res.json();
     setEvents(eventsJson);
-    setFilteredEvents(eventsJson);
+    setFilteredDistanceEvents(new Set(eventsJson));
+    setFilteredLocationEvents(new Set(eventsJson));
+    setFilteredSeasonEvents(new Set(eventsJson));
+    setFilteredPriceEvents(new Set(eventsJson));
+    setFilteredCategoryEvents(new Set(eventsJson));
     setLoading(false);
     localStorage.setItem('events', JSON.stringify(eventsJson));
   };
@@ -58,26 +72,36 @@ const App = () => {
   useEffect(() => {
     if (localStorage.getItem('events')) {
       const eventsJsonString = '' + localStorage.getItem('events');
-      setEvents(JSON.parse(eventsJsonString));
-      setFilteredEvents(JSON.parse(eventsJsonString));
+      const parsed = JSON.parse(eventsJsonString);
+      setEvents(parsed);
+      setFilteredDistanceEvents(new Set(parsed));
+      setFilteredLocationEvents(new Set(parsed));
+      setFilteredSeasonEvents(new Set(parsed));
+      setFilteredPriceEvents(new Set(parsed));
+      setFilteredCategoryEvents(new Set(parsed));
     } else {
       getBikepackingEvents();
     }
   }, []);
 
+  // combine the intersection of all the filtered events
   useEffect(() => {
-    if (distance) {
-      const eventsFilteredByDistance = events.filter((event) => {
-        if (event.distance) {
-          const d = +event.distance.split('/')[0].slice(0, -3);
-          if (d <= distance) {
-            return event;
-          }
-        }
-      });
-      setFilteredEvents(eventsFilteredByDistance);
-    }
-  }, [distance]);
+    const intersection = events.filter(
+      (event) =>
+        filteredDistanceEvents.has(event) &&
+        filteredLocationEvents.has(event) &&
+        filteredSeasonEvents.has(event) &&
+        filteredPriceEvents.has(event) &&
+        filteredCategoryEvents.has(event),
+    );
+    setFilteredEvents(intersection);
+  }, [
+    filteredDistanceEvents,
+    filteredLocationEvents,
+    filteredSeasonEvents,
+    filteredPriceEvents,
+    filteredCategoryEvents,
+  ]);
 
   return (
     <div className='app'>
@@ -94,20 +118,24 @@ const App = () => {
         <div className='filter'>
           <p>distance:</p>
           <DistanceFilter
-            callback={(distance: number) => setDistance(distance)}
+            events={events}
+            callback={(filteredEvents: BikepackingEvent[]) =>
+              setFilteredDistanceEvents(new Set(filteredEvents))
+            }
           />
         </div>
         <div className='filter'>
           <p>location:</p>
-          <DistanceFilter
-            callback={(distance: number) => setDistance(distance)}
+          <LocationFilter
+            events={events}
+            callback={(filteredEvents: BikepackingEvent[]) =>
+              setFilteredLocationEvents(new Set(filteredEvents))
+            }
           />
         </div>
-        <div className='filter'>
+        {/* <div className='filter'>
           <p>season:</p>
-          <DistanceFilter
-            callback={(distance: number) => setDistance(distance)}
-          />
+          <SeasonFilter callback={(season: string) => setSeason(season)} />
         </div>
         <div className='filter'>
           <p>price:</p>
@@ -120,7 +148,7 @@ const App = () => {
           <DistanceFilter
             callback={(distance: number) => setDistance(distance)}
           />
-        </div>
+        </div> */}
       </div>
       <div className='events'>
         {loading ? (
