@@ -4,6 +4,7 @@ import LocationFilter from './components/LocationFilter';
 import DateFilter from './components/DateFilter';
 import './App.css';
 import PriceFilter from './components/PriceFilter';
+import CategoryFilter from './components/CategoryFilter';
 
 const devPath = 'http://localhost:8000/api/events';
 const prodAPIPath = 'https://nycmud.com/api/events';
@@ -24,6 +25,7 @@ export interface BikepackingEvent {
 // TODO: rest of filters
 // TODO: ability to sort by filter category
 // TODO: next/prev button - just returns that page's set of events
+// TODO: mobile screen styles
 const App = () => {
   const [events, setEvents] = useState<BikepackingEvent[]>([]);
   const [filteredDistanceEvents, setFilteredDistanceEvents] = useState<
@@ -153,12 +155,15 @@ const App = () => {
             }
           />
         </div>
-        {/* <div className='filter'>
+        <div className='filter'>
           <p>category:</p>
-          <DistanceFilter
-            callback={(distance: number) => setDistance(distance)}
+          <CategoryFilter
+            events={events}
+            callback={(filteredEvents: BikepackingEvent[]) =>
+              setFilteredPriceEvents(new Set(filteredEvents))
+            }
           />
-        </div> */}
+        </div>
       </div>
       <div className='events'>
         {loading ? (
