@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import DistanceFilter from './components/DistanceFilter';
-// import SeasonFilter from './components/SeasonFilter';
 import LocationFilter from './components/LocationFilter';
+import DateFilter from './components/DateFilter';
 import './App.css';
 
 const devPath = 'http://localhost:8000/api/events';
@@ -31,7 +31,7 @@ const App = () => {
   const [filteredLocationEvents, setFilteredLocationEvents] = useState<
     Set<BikepackingEvent>
   >(new Set());
-  const [filteredSeasonEvents, setFilteredSeasonEvents] = useState<
+  const [filteredDateEvents, setFilteredDateEvents] = useState<
     Set<BikepackingEvent>
   >(new Set());
   const [filteredPriceEvents, setFilteredPriceEvents] = useState<
@@ -54,7 +54,7 @@ const App = () => {
     setEvents(eventsJson);
     setFilteredDistanceEvents(new Set(eventsJson));
     setFilteredLocationEvents(new Set(eventsJson));
-    setFilteredSeasonEvents(new Set(eventsJson));
+    setFilteredDateEvents(new Set(eventsJson));
     setFilteredPriceEvents(new Set(eventsJson));
     setFilteredCategoryEvents(new Set(eventsJson));
     setLoading(false);
@@ -76,7 +76,7 @@ const App = () => {
       setEvents(parsed);
       setFilteredDistanceEvents(new Set(parsed));
       setFilteredLocationEvents(new Set(parsed));
-      setFilteredSeasonEvents(new Set(parsed));
+      setFilteredDateEvents(new Set(parsed));
       setFilteredPriceEvents(new Set(parsed));
       setFilteredCategoryEvents(new Set(parsed));
     } else {
@@ -90,7 +90,7 @@ const App = () => {
       (event) =>
         filteredDistanceEvents.has(event) &&
         filteredLocationEvents.has(event) &&
-        filteredSeasonEvents.has(event) &&
+        filteredDateEvents.has(event) &&
         filteredPriceEvents.has(event) &&
         filteredCategoryEvents.has(event),
     );
@@ -98,7 +98,7 @@ const App = () => {
   }, [
     filteredDistanceEvents,
     filteredLocationEvents,
-    filteredSeasonEvents,
+    filteredDateEvents,
     filteredPriceEvents,
     filteredCategoryEvents,
   ]);
@@ -133,11 +133,16 @@ const App = () => {
             }
           />
         </div>
-        {/* <div className='filter'>
-          <p>season:</p>
-          <SeasonFilter callback={(season: string) => setSeason(season)} />
-        </div>
         <div className='filter'>
+          <p>month:</p>
+          <DateFilter
+            events={events}
+            callback={(filteredEvents: BikepackingEvent[]) =>
+              setFilteredDateEvents(new Set(filteredEvents))
+            }
+          />
+        </div>
+        {/* <div className='filter'>
           <p>price:</p>
           <DistanceFilter
             callback={(distance: number) => setDistance(distance)}
