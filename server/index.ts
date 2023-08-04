@@ -34,7 +34,8 @@ app.get('/api/events', async (req, res) => {
         .text()
         .split(' / ');
       const titleAndDistance = $('h2').text().split('(');
-      const distance = titleAndDistance.pop()!.slice(0, -1);
+      const distance =
+        titleAndDistance.length > 1 ? titleAndDistance.pop()!.slice(0, -1) : '';
       const title =
         titleAndDistance.length > 1
           ? `${titleAndDistance[0]}(${titleAndDistance[1]}`
@@ -45,7 +46,9 @@ app.get('/api/events', async (req, res) => {
         distance,
         eventUrl: $('a').attr('href'),
         date: dateAndPrice.find('span.tribe-event-date-start').text(),
-        price: dateAndPrice.find('span:not(.tribe-event-date-start)').text(),
+        price: dateAndPrice
+          .find('span:not(.tribe-event-date-start, .tribe-event-time)')
+          .text(),
         category,
         location,
         detail: $('p').text(),
