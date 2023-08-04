@@ -13,7 +13,6 @@ const options = [
 ];
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
-// TODO: distance is optional (for non-ride events)
 const DistanceFilter = ({ events, callback }: Props) => {
   const [distance, setDistance] = useState<number | string>();
 
@@ -23,8 +22,9 @@ const DistanceFilter = ({ events, callback }: Props) => {
         if (event.distance) {
           const d = +event.distance.split('/')[0].slice(0, -3);
           return distance.toString() === 'all' || d <= distance;
+        } else {
+          return event;
         }
-        return null;
       });
       callback(filteredEvents);
     }
