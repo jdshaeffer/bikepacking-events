@@ -20,13 +20,15 @@ const PriceFilter = ({ events, callback }: Props) => {
     if (price) {
       const filteredEvents = events.filter((event) => {
         if (event.price) {
-          console.log(event.price);
-          // const m = event.date.split(' ')[0].toLocaleLowerCase();
-          // return month === m.slice(0, 3) || month === 'all';
+          if (event.price === 'Free') {
+            return price === 'free' || price === 'all';
+          } else {
+            const p = +event.price.slice(1, event.price.length);
+            return p <= price || price === 'all';
+          }
         } else {
-          console.log('no price!');
+          return price === 'free' || price === 'all';
         }
-        return null;
       });
       callback(filteredEvents);
     }
