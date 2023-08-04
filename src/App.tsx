@@ -101,6 +101,7 @@ const App = () => {
     filteredDateEvents,
     filteredPriceEvents,
     filteredCategoryEvents,
+    events,
   ]);
 
   return (

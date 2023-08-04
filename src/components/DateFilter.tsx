@@ -30,10 +30,11 @@ const DateFilter = ({ events, callback }: Props) => {
           const m = event.date.split(' ')[0].toLocaleLowerCase();
           return month === m.slice(0, 3) || month === 'all';
         }
+        return null;
       });
       callback(filteredEvents);
     }
-  }, [month]);
+  }, [month, events, callback]);
 
   return (
     <Select

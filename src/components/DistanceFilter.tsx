@@ -24,10 +24,11 @@ const DistanceFilter = ({ events, callback }: Props) => {
           const d = +event.distance.split('/')[0].slice(0, -3);
           return distance.toString() === 'all' || d <= distance;
         }
+        return null;
       });
       callback(filteredEvents);
     }
-  }, [distance]);
+  }, [distance, events, callback]);
 
   return (
     <Select
