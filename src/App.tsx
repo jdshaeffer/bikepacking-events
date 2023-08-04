@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import DistanceFilter from './components/DistanceFilter';
 import LocationFilter from './components/LocationFilter';
 import DateFilter from './components/DateFilter';
-import './App.css';
 import PriceFilter from './components/PriceFilter';
 import CategoryFilter from './components/CategoryFilter';
+import './App.css';
 
 const devPath = 'http://localhost:8000/api/events';
 const prodAPIPath = 'https://nycmud.com/api/events';
-const prodFEPath = 'https://jdshaeffer.github.io/bikepacking-events';
+const prodFEPath = 'https://jdshaeffer.github.io/bikepacking-events/';
 
 export interface BikepackingEvent {
   title: string;
