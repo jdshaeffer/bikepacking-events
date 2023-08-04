@@ -22,9 +22,7 @@ const DistanceFilter = ({ events, callback }: Props) => {
       const filteredEvents = events.filter((event) => {
         if (event.distance) {
           const d = +event.distance.split('/')[0].slice(0, -3);
-          if (distance.toString() === 'all' || d <= distance) {
-            return event;
-          }
+          return distance.toString() === 'all' || d <= distance;
         }
       });
       callback(filteredEvents);
