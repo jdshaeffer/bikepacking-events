@@ -3,6 +3,7 @@ import DistanceFilter from './components/DistanceFilter';
 import LocationFilter from './components/LocationFilter';
 import DateFilter from './components/DateFilter';
 import './App.css';
+import PriceFilter from './components/PriceFilter';
 
 const devPath = 'http://localhost:8000/api/events';
 const prodAPIPath = 'https://nycmud.com/api/events';
@@ -143,13 +144,16 @@ const App = () => {
             }
           />
         </div>
-        {/* <div className='filter'>
+        <div className='filter'>
           <p>price:</p>
-          <DistanceFilter
-            callback={(distance: number) => setDistance(distance)}
+          <PriceFilter
+            events={events}
+            callback={(filteredEvents: BikepackingEvent[]) =>
+              setFilteredPriceEvents(new Set(filteredEvents))
+            }
           />
         </div>
-        <div className='filter'>
+        {/* <div className='filter'>
           <p>category:</p>
           <DistanceFilter
             callback={(distance: number) => setDistance(distance)}

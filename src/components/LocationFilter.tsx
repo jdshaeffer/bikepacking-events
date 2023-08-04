@@ -56,7 +56,7 @@ const LocationFilter = ({ events, callback }: Props) => {
       });
       callback(filteredEvents);
     }
-  }, [location]);
+  }, [location, events]);
 
   return (
     <Select

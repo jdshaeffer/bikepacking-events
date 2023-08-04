@@ -28,7 +28,7 @@ const DistanceFilter = ({ events, callback }: Props) => {
       });
       callback(filteredEvents);
     }
-  }, [distance, events, callback]);
+  }, [distance, events]);
 
   return (
     <Select

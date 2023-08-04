@@ -34,7 +34,7 @@ const DateFilter = ({ events, callback }: Props) => {
       });
       callback(filteredEvents);
     }
-  }, [month, events, callback]);
+  }, [month, events]);
 
   return (
     <Select
