@@ -1,15 +1,15 @@
 # 🚲 bikepacking-events 🚲
 
-### filter down bikepacking.com's events page to allow for easier planning so you can go to more bikepacking events yo
+### filtering and sorting for [bikepacking.com/events](https://bikepacking.com/events/)
 
 ## stuff for myself:
 
 > (or anyone forking this thing)
 
-- webscraping https://bikepacking.com/events/ with puppetter from a simple node/express server in my linode box
+- webscraping https://bikepacking.com/events/ with puppeteer from a simple node/express server in my linode box
 - `yarn start` for dev (it's just a create react app)
 - push to master will trigger a gh action workflow that runs a pre-deploy and the gh-pages build
-- change settings/pages to serve the gh-pages branch from / (root)
+- github's settings/pages - gh-pages branch is being served from / (root)
 
 ## other stuff:
 
