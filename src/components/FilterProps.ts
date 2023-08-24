@@ -1,6 +1,7 @@
 import { BikepackingEvent } from '../App';
 
-export interface Props {
+export interface FilterProps {
   events: BikepackingEvent[];
   callback: (filteredEvents: BikepackingEvent[]) => void;
+  sortCallback: (filter: string) => void;
 }

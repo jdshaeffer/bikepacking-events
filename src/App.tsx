@@ -22,10 +22,10 @@ export interface BikepackingEvent {
 }
 
 // TODO: refresh events in background - load localstorage and then get new events... avoid repaint though - maybe just refresh button?
-// TODO: rest of filters
 // TODO: ability to sort by filter category
 // TODO: next/prev button - just returns that page's set of events
 // TODO: mobile screen styles
+// TODO: bug in price filter
 const App = () => {
   const [events, setEvents] = useState<BikepackingEvent[]>([]);
   const [filteredDistanceEvents, setFilteredDistanceEvents] = useState<
@@ -46,23 +46,6 @@ const App = () => {
   const [filteredEvents, setFilteredEvents] = useState<BikepackingEvent[]>([]);
   const [loading, setLoading] = useState(false);
   const [waitingStr, setWaitingStr] = useState('...');
-
-  const getBikepackingEvents = async () => {
-    setLoading(true);
-    const res = await fetch(
-      window.location.href === prodFEPath ? prodAPIPath : devPath,
-      { mode: 'cors' },
-    );
-    const eventsJson = await res.json();
-    setEvents(eventsJson);
-    setFilteredDistanceEvents(new Set(eventsJson));
-    setFilteredLocationEvents(new Set(eventsJson));
-    setFilteredDateEvents(new Set(eventsJson));
-    setFilteredPriceEvents(new Set(eventsJson));
-    setFilteredCategoryEvents(new Set(eventsJson));
-    setLoading(false);
-    localStorage.setItem('events', JSON.stringify(eventsJson));
-  };
 
   useEffect(() => {
     if (loading) {
@@ -107,6 +90,23 @@ const App = () => {
     events,
   ]);
 
+  const getBikepackingEvents = async () => {
+    setLoading(true);
+    const res = await fetch(
+      window.location.href === prodFEPath ? prodAPIPath : devPath,
+      { mode: 'cors' },
+    );
+    const eventsJson = await res.json();
+    setEvents(eventsJson);
+    setFilteredDistanceEvents(new Set(eventsJson));
+    setFilteredLocationEvents(new Set(eventsJson));
+    setFilteredDateEvents(new Set(eventsJson));
+    setFilteredPriceEvents(new Set(eventsJson));
+    setFilteredCategoryEvents(new Set(eventsJson));
+    setLoading(false);
+    localStorage.setItem('events', JSON.stringify(eventsJson));
+  };
+
   return (
     <div className='app'>
       <div className='app-header'>
@@ -119,51 +119,43 @@ const App = () => {
         </span>
       </div>
       <div className='filters'>
-        <div className='filter'>
-          <p>distance:</p>
-          <DistanceFilter
-            events={events}
-            callback={(filteredEvents: BikepackingEvent[]) =>
-              setFilteredDistanceEvents(new Set(filteredEvents))
-            }
-          />
-        </div>
-        <div className='filter'>
-          <p>location:</p>
-          <LocationFilter
-            events={events}
-            callback={(filteredEvents: BikepackingEvent[]) =>
-              setFilteredLocationEvents(new Set(filteredEvents))
-            }
-          />
-        </div>
-        <div className='filter'>
-          <p>month:</p>
-          <DateFilter
-            events={events}
-            callback={(filteredEvents: BikepackingEvent[]) =>
-              setFilteredDateEvents(new Set(filteredEvents))
-            }
-          />
-        </div>
-        <div className='filter'>
-          <p>price:</p>
-          <PriceFilter
-            events={events}
-            callback={(filteredEvents: BikepackingEvent[]) =>
-              setFilteredPriceEvents(new Set(filteredEvents))
-            }
-          />
-        </div>
-        <div className='filter'>
-          <p>category:</p>
-          <CategoryFilter
-            events={events}
-            callback={(filteredEvents: BikepackingEvent[]) =>
-              setFilteredPriceEvents(new Set(filteredEvents))
-            }
-          />
-        </div>
+        <DistanceFilter
+          events={events}
+          callback={(filteredEvents: BikepackingEvent[]) =>
+            setFilteredDistanceEvents(new Set(filteredEvents))
+          }
+          sortCallback={(filter) => {
+            // neutralize all other sorts here - only necessary to update the label, the filtered events will handle themselves
+          }}
+        />
+        <LocationFilter
+          events={events}
+          callback={(filteredEvents: BikepackingEvent[]) =>
+            setFilteredLocationEvents(new Set(filteredEvents))
+          }
+          sortCallback={(filter) => {}}
+        />
+        <DateFilter
+          events={events}
+          callback={(filteredEvents: BikepackingEvent[]) =>
+            setFilteredDateEvents(new Set(filteredEvents))
+          }
+          sortCallback={(filter) => {}}
+        />
+        <PriceFilter
+          events={events}
+          callback={(filteredEvents: BikepackingEvent[]) =>
+            setFilteredPriceEvents(new Set(filteredEvents))
+          }
+          sortCallback={(filter) => {}}
+        />
+        <CategoryFilter
+          events={events}
+          callback={(filteredEvents: BikepackingEvent[]) =>
+            setFilteredPriceEvents(new Set(filteredEvents))
+          }
+          sortCallback={(filter) => {}}
+        />
       </div>
       <div className='events'>
         {loading ? (

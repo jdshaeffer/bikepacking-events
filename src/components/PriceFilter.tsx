@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { Props } from './Props';
+import { FilterProps } from './FilterProps';
 import filterStyles from './FilterStyles';
 
 const options = [
@@ -13,7 +13,7 @@ const options = [
 ];
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
-const PriceFilter = ({ events, callback }: Props) => {
+const PriceFilter = ({ events, callback }: FilterProps) => {
   const [price, setPrice] = useState<string | number>();
 
   useEffect(() => {
@@ -35,13 +35,16 @@ const PriceFilter = ({ events, callback }: Props) => {
   }, [price, events]);
 
   return (
-    <Select
-      options={options}
-      onChange={(e: any) => setPrice(e.value)}
-      placeholder='select...'
-      noOptionsMessage={() => 'no options'}
-      styles={filterStyles}
-    />
+    <div className='filter'>
+      <p>price</p>
+      <Select
+        options={options}
+        onChange={(e: any) => setPrice(e.value)}
+        placeholder='select...'
+        noOptionsMessage={() => 'no options'}
+        styles={filterStyles}
+      />
+    </div>
   );
 };
 

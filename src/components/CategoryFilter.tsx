@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { Props } from './Props';
+import { FilterProps } from './FilterProps';
 import filterStyles from './FilterStyles';
 
 const options = [
@@ -13,7 +13,7 @@ const options = [
 ];
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
-const CategoryFilter = ({ events, callback }: Props) => {
+const CategoryFilter = ({ events, callback }: FilterProps) => {
   const [category, setCategory] = useState<string>();
 
   useEffect(() => {
@@ -30,13 +30,16 @@ const CategoryFilter = ({ events, callback }: Props) => {
   }, [category, events]);
 
   return (
-    <Select
-      options={options}
-      onChange={(e: any) => setCategory(e.value)}
-      placeholder='select...'
-      noOptionsMessage={() => 'no options'}
-      styles={filterStyles}
-    />
+    <div className='filter'>
+      <p>category</p>
+      <Select
+        options={options}
+        onChange={(e: any) => setCategory(e.value)}
+        placeholder='select...'
+        noOptionsMessage={() => 'no options'}
+        styles={filterStyles}
+      />
+    </div>
   );
 };
 

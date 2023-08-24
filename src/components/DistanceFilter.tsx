@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { Props } from './Props';
+import { FilterProps } from './FilterProps';
 import filterStyles from './FilterStyles';
+import SortSymbol from './SortSymbol';
+import '../App.css';
+import { BikepackingEvent } from '../App';
 
 const options = [
   { value: 'all', label: '(all distances)' },
@@ -13,31 +16,63 @@ const options = [
 ];
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
-const DistanceFilter = ({ events, callback }: Props) => {
+const DistanceFilter = ({ events, callback, sortCallback }: FilterProps) => {
   const [distance, setDistance] = useState<number | string>();
+  const [sortDir, setSortDir] = useState<string>();
+
+  const handleSortChange = (dir: string) => {
+    sortCallback('distance');
+    setSortDir(dir);
+  };
+
+  const getDistance = (event: BikepackingEvent) => {
+    return +event.distance.split('/')[0].slice(0, -3);
+  };
 
   useEffect(() => {
+    let sortedEvents = events;
+    if (sortDir) {
+      sortedEvents = events.sort((eventA, eventB) => {
+        const disA = getDistance(eventA);
+        const disB = getDistance(eventB);
+        if (sortDir === '⬆') {
+          return disB - disA;
+        } else {
+          return disA - disB;
+        }
+      });
+    }
+    let filteredAndSortedEvents = sortedEvents;
     if (distance) {
-      const filteredEvents = events.filter((event) => {
+      filteredAndSortedEvents = filteredAndSortedEvents.filter((event) => {
         if (event.distance) {
-          const d = +event.distance.split('/')[0].slice(0, -3);
+          const d = getDistance(event);
           return distance.toString() === 'all' || d <= distance;
         } else {
           return event;
         }
       });
-      callback(filteredEvents);
     }
-  }, [distance, events]);
+    callback(filteredAndSortedEvents);
+  }, [distance, events, sortDir]);
 
   return (
-    <Select
-      options={options}
-      onChange={(e: any) => setDistance(e.value)}
-      placeholder='select...'
-      noOptionsMessage={() => 'no options'}
-      styles={filterStyles}
-    />
+    <div className='filter'>
+      <p>
+        distance
+        <SortSymbol
+          defaultAsc={false}
+          callback={(dir) => handleSortChange(dir)}
+        />
+      </p>
+      <Select
+        options={options}
+        onChange={(e: any) => setDistance(e.value)}
+        placeholder='select...'
+        noOptionsMessage={() => 'no options'}
+        styles={filterStyles}
+      />
+    </div>
   );
 };
 

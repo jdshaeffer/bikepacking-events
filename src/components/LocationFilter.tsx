@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { Props } from './Props';
+import { FilterProps } from './FilterProps';
 import {
   countriesAfrica,
   countriesAsia,
@@ -23,7 +23,7 @@ const options = [
 ];
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
-const LocationFilter = ({ events, callback }: Props) => {
+const LocationFilter = ({ events, callback }: FilterProps) => {
   const [location, setLocation] = useState<string>();
 
   useEffect(() => {
@@ -59,13 +59,16 @@ const LocationFilter = ({ events, callback }: Props) => {
   }, [location, events]);
 
   return (
-    <Select
-      options={options}
-      onChange={(e: any) => setLocation(e.value)}
-      placeholder='select...'
-      noOptionsMessage={() => 'no options'}
-      styles={filterStyles}
-    />
+    <div className='filter'>
+      <p className='sort-title'>location</p>
+      <Select
+        options={options}
+        onChange={(e: any) => setLocation(e.value)}
+        placeholder='select...'
+        noOptionsMessage={() => 'no options'}
+        styles={filterStyles}
+      />
+    </div>
   );
 };
 

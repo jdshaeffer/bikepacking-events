@@ -71,9 +71,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  font-size: calc(1px + 2vmin);
 }
 
 .emoji {
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.filter-emoji {
+  margin-left: 20px;
+  cursor: pointer;
 }
