@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
+import { BikepackingEvent } from '../App';
 import { FilterProps } from './FilterProps';
 import filterStyles from './FilterStyles';
+import SortSymbol from './SortSymbol';
 
 const options = [
   { value: 'all', label: '(any category)' },
@@ -13,25 +15,74 @@ const options = [
 ];
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
-const CategoryFilter = ({ events, callback }: FilterProps) => {
+const CategoryFilter = ({
+  events,
+  callback,
+  sortCallback,
+  refreshSort,
+}: FilterProps) => {
   const [category, setCategory] = useState<string>();
+  const [sortDir, setSortDir] = useState<string>('');
+
+  const handleSortChange = (dir: string) => {
+    sortCallback('category');
+    setSortDir(dir);
+  };
+
+  const getCategory = (event: BikepackingEvent) => {
+    return event.category.toLocaleLowerCase();
+  };
 
   useEffect(() => {
+    let sortedEvents = events;
+    if (sortDir) {
+      sortedEvents = events.sort((eventA, eventB) => {
+        const locA = getCategory(eventA);
+        const locB = getCategory(eventB);
+        if (sortDir === '⬆') {
+          if (locA! < locB!) {
+            return -1;
+          } else if (locA! > locB!) {
+            return 1;
+          }
+          return 0;
+        } else {
+          if (locA! > locB!) {
+            return -1;
+          } else if (locA! < locB!) {
+            return 1;
+          }
+          return 0;
+        }
+      });
+    }
+    let filteredAndSortedEvents = sortedEvents;
     if (category) {
-      const filteredEvents = events.filter((event) => {
+      filteredAndSortedEvents = filteredAndSortedEvents.filter((event) => {
         if (event.category) {
-          const c = event.category.toLocaleLowerCase();
+          const c = getCategory(event);
           return c === category || category === 'all';
         }
         return category === 'all';
       });
-      callback(filteredEvents);
     }
-  }, [category, events]);
+    callback(filteredAndSortedEvents);
+  }, [category, events, sortDir]);
+
+  useEffect(() => {
+    setSortDir('');
+  }, [refreshSort]);
 
   return (
     <div className='filter'>
-      <p>category</p>
+      <p>
+        category
+        <SortSymbol
+          defaultAsc={false}
+          callback={(dir) => handleSortChange(dir)}
+          refresh={refreshSort}
+        />
+      </p>
       <Select
         options={options}
         onChange={(e: any) => setCategory(e.value)}

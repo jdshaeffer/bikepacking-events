@@ -16,9 +16,15 @@ const options = [
 ];
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
-const DistanceFilter = ({ events, callback, sortCallback }: FilterProps) => {
+const DistanceFilter = ({
+  events,
+  callback,
+  sortCallback,
+  refreshSort,
+}: FilterProps) => {
   const [distance, setDistance] = useState<number | string>();
   const [sortDir, setSortDir] = useState<string>();
+  // SortSymbol reads refreshSort, if true, changes direction to noSort, changes back to false immediately, else, nothing
 
   const handleSortChange = (dir: string) => {
     sortCallback('distance');
@@ -56,6 +62,10 @@ const DistanceFilter = ({ events, callback, sortCallback }: FilterProps) => {
     callback(filteredAndSortedEvents);
   }, [distance, events, sortDir]);
 
+  useEffect(() => {
+    setSortDir('');
+  }, [refreshSort]);
+
   return (
     <div className='filter'>
       <p>
@@ -63,6 +73,7 @@ const DistanceFilter = ({ events, callback, sortCallback }: FilterProps) => {
         <SortSymbol
           defaultAsc={false}
           callback={(dir) => handleSortChange(dir)}
+          refresh={refreshSort}
         />
       </p>
       <Select

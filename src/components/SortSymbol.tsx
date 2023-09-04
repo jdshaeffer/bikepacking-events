@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../App.css';
 
 export const upEmoji = 0x1f53c;
@@ -12,9 +12,10 @@ export const desSort = '⬇';
 interface Props {
   defaultAsc: boolean;
   callback: (dir: string) => void;
+  refresh: boolean;
 }
 
-const SortSymbol = ({ defaultAsc, callback }: Props) => {
+const SortSymbol = ({ defaultAsc, callback, refresh }: Props) => {
   const [label, setLabel] = useState('');
   const [direction, setDirection] = useState(defaultAsc ? ascSort : noSort);
 
@@ -28,6 +29,12 @@ const SortSymbol = ({ defaultAsc, callback }: Props) => {
     callback(newDir);
     setDirection(newDir);
   };
+
+  useEffect(() => {
+    if (refresh) {
+      setDirection(noSort);
+    }
+  }, [refresh]);
 
   return (
     <span

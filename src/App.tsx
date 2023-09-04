@@ -45,6 +45,11 @@ const App = () => {
   const [filteredEvents, setFilteredEvents] = useState<BikepackingEvent[]>([]);
   const [loading, setLoading] = useState(false);
   const [waitingStr, setWaitingStr] = useState('...');
+  const [refreshDistanceSort, setRefreshDistanceSort] = useState(false);
+  const [refreshLocationSort, setRefreshLocationSort] = useState(false);
+  const [refreshDateSort, setRefreshDateSort] = useState(false);
+  const [refreshPriceSort, setRefreshPriceSort] = useState(false);
+  const [refreshCategorySort, setRefreshCategorySort] = useState(false);
 
   useEffect(() => {
     if (loading) {
@@ -89,6 +94,21 @@ const App = () => {
     events,
   ]);
 
+  // refresh the refresh
+  useEffect(() => {
+    setRefreshDistanceSort(false);
+    setRefreshLocationSort(false);
+    setRefreshDateSort(false);
+    setRefreshPriceSort(false);
+    setRefreshCategorySort(false);
+  }, [
+    refreshDistanceSort,
+    refreshLocationSort,
+    refreshDateSort,
+    refreshPriceSort,
+    refreshCategorySort,
+  ]);
+
   const getBikepackingEvents = async () => {
     setLoading(true);
     const res = await fetch(
@@ -104,6 +124,25 @@ const App = () => {
     setFilteredCategoryEvents(new Set(eventsJson));
     setLoading(false);
     localStorage.setItem('events', JSON.stringify(eventsJson));
+  };
+
+  const handleGroupSort = (filter: string) => {
+    type FilterDict = {
+      [key: string]: () => void;
+    };
+    const filterDict: FilterDict = {
+      distance: () => setRefreshDistanceSort(true),
+      location: () => setRefreshLocationSort(true),
+      date: () => setRefreshDateSort(true),
+      price: () => setRefreshPriceSort(true),
+      category: () => setRefreshCategorySort(true),
+    };
+    for (const f of Object.keys(filterDict)) {
+      if (filter === f) {
+        continue;
+      }
+      filterDict[f]();
+    }
   };
 
   return (
@@ -123,37 +162,40 @@ const App = () => {
           callback={(filteredEvents: BikepackingEvent[]) =>
             setFilteredDistanceEvents(new Set(filteredEvents))
           }
-          sortCallback={(filter) => {
-            // neutralize all other sorts here - only necessary to update the label, the filtered events will handle themselves
-          }}
+          sortCallback={(filter) => handleGroupSort(filter)}
+          refreshSort={refreshDistanceSort}
         />
         <LocationFilter
           events={events}
           callback={(filteredEvents: BikepackingEvent[]) =>
             setFilteredLocationEvents(new Set(filteredEvents))
           }
-          sortCallback={(filter) => {}}
+          sortCallback={(filter) => handleGroupSort(filter)}
+          refreshSort={refreshLocationSort}
         />
         <DateFilter
           events={events}
           callback={(filteredEvents: BikepackingEvent[]) =>
             setFilteredDateEvents(new Set(filteredEvents))
           }
-          sortCallback={(filter) => {}}
+          sortCallback={(filter) => handleGroupSort(filter)}
+          refreshSort={refreshDateSort}
         />
         <PriceFilter
           events={events}
           callback={(filteredEvents: BikepackingEvent[]) =>
             setFilteredPriceEvents(new Set(filteredEvents))
           }
-          sortCallback={(filter) => {}}
+          sortCallback={(filter) => handleGroupSort(filter)}
+          refreshSort={refreshPriceSort}
         />
         <CategoryFilter
           events={events}
           callback={(filteredEvents: BikepackingEvent[]) =>
             setFilteredPriceEvents(new Set(filteredEvents))
           }
-          sortCallback={(filter) => {}}
+          sortCallback={(filter) => handleGroupSort(filter)}
+          refreshSort={refreshCategorySort}
         />
       </div>
       <div className='events'>

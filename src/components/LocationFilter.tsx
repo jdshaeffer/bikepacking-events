@@ -10,8 +10,8 @@ import {
 } from './countries';
 import filterStyles from './FilterStyles';
 import { BikepackingEvent } from '../App';
-import '../App.css';
 import SortSymbol from './SortSymbol';
+import '../App.css';
 
 const options = [
   { value: 'all', label: '(all locations)' },
@@ -26,9 +26,14 @@ const options = [
 ];
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
-const LocationFilter = ({ events, callback, sortCallback }: FilterProps) => {
+const LocationFilter = ({
+  events,
+  callback,
+  sortCallback,
+  refreshSort,
+}: FilterProps) => {
   const [location, setLocation] = useState<string>();
-  const [sortDir, setSortDir] = useState<string>();
+  const [sortDir, setSortDir] = useState<string>('');
 
   const handleSortChange = (dir: string) => {
     sortCallback('location');
@@ -45,7 +50,6 @@ const LocationFilter = ({ events, callback, sortCallback }: FilterProps) => {
       sortedEvents = events.sort((eventA, eventB) => {
         const locA = getLocation(eventA);
         const locB = getLocation(eventB);
-        console.log(locA);
         if (sortDir === '⬆') {
           if (locA! < locB!) {
             return -1;
@@ -99,6 +103,10 @@ const LocationFilter = ({ events, callback, sortCallback }: FilterProps) => {
     callback(filteredAndSortedEvents);
   }, [location, events, sortDir]);
 
+  useEffect(() => {
+    setSortDir('');
+  }, [refreshSort]);
+
   return (
     <div className='filter'>
       <p>
@@ -106,6 +114,7 @@ const LocationFilter = ({ events, callback, sortCallback }: FilterProps) => {
         <SortSymbol
           defaultAsc={false}
           callback={(dir) => handleSortChange(dir)}
+          refresh={refreshSort}
         />
       </p>
       <Select
