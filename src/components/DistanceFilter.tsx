@@ -3,8 +3,8 @@ import Select from 'react-select';
 import { FilterProps } from './FilterProps';
 import filterStyles from './FilterStyles';
 import SortSymbol from './SortSymbol';
-import '../App.css';
 import { BikepackingEvent } from '../App';
+import '../App.css';
 
 const options = [
   { value: 'all', label: '(all distances)' },
@@ -36,9 +36,9 @@ const DistanceFilter = ({ events, callback, sortCallback }: FilterProps) => {
         const disA = getDistance(eventA);
         const disB = getDistance(eventB);
         if (sortDir === '⬆') {
-          return disB - disA;
-        } else {
           return disA - disB;
+        } else {
+          return disB - disA;
         }
       });
     }

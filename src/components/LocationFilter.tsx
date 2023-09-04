@@ -9,6 +9,9 @@ import {
   countriesSouthAmerica,
 } from './countries';
 import filterStyles from './FilterStyles';
+import { BikepackingEvent } from '../App';
+import '../App.css';
+import SortSymbol from './SortSymbol';
 
 const options = [
   { value: 'all', label: '(all locations)' },
@@ -23,44 +26,88 @@ const options = [
 ];
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
-const LocationFilter = ({ events, callback }: FilterProps) => {
+const LocationFilter = ({ events, callback, sortCallback }: FilterProps) => {
   const [location, setLocation] = useState<string>();
+  const [sortDir, setSortDir] = useState<string>();
+
+  const handleSortChange = (dir: string) => {
+    sortCallback('location');
+    setSortDir(dir);
+  };
+
+  const getLocation = (event: BikepackingEvent) => {
+    return event.location.trim().toLocaleLowerCase();
+  };
 
   useEffect(() => {
+    let sortedEvents = events;
+    if (sortDir) {
+      sortedEvents = events.sort((eventA, eventB) => {
+        const locA = getLocation(eventA);
+        const locB = getLocation(eventB);
+        console.log(locA);
+        if (sortDir === '⬆') {
+          if (locA! < locB!) {
+            return -1;
+          } else if (locA! > locB!) {
+            return 1;
+          }
+          return 0;
+        } else {
+          if (locA! > locB!) {
+            return -1;
+          } else if (locA! < locB!) {
+            return 1;
+          }
+          return 0;
+        }
+      });
+    }
+    let filteredAndSortedEvents = sortedEvents;
     if (location) {
-      const filteredEvents = events.filter((event) => {
+      filteredAndSortedEvents = filteredAndSortedEvents.filter((event) => {
         if (event.location) {
-          const l = event.location.split(',').pop()?.trim().toLocaleLowerCase();
-          if (l) {
+          const country = event.location
+            .split(',')
+            .pop()
+            ?.trim()
+            .toLocaleLowerCase();
+          if (country) {
             if (location === 'us') {
-              return l === 'united states';
+              return country === 'united states';
             } else if (location === 'ca') {
-              return l === 'canada';
+              return country === 'canada';
             } else if (location === 'uk') {
-              return l === 'united kingdom';
+              return country === 'united kingdom';
             } else if (location === 'sa') {
-              return countriesSouthAmerica.has(l);
+              return countriesSouthAmerica.has(country);
             } else if (location === 'eu') {
-              return countriesEurope.has(l);
+              return countriesEurope.has(country);
             } else if (location === 'af') {
-              return countriesAfrica.has(l);
+              return countriesAfrica.has(country);
             } else if (location === 'as') {
-              return countriesAsia.has(l);
+              return countriesAsia.has(country);
             } else if (location === 'oc') {
-              return countriesOceania.has(l);
+              return countriesOceania.has(country);
             } else if (location === 'all') {
               return event;
             }
           }
         }
       });
-      callback(filteredEvents);
     }
-  }, [location, events]);
+    callback(filteredAndSortedEvents);
+  }, [location, events, sortDir]);
 
   return (
     <div className='filter'>
-      <p className='sort-title'>location</p>
+      <p>
+        location
+        <SortSymbol
+          defaultAsc={false}
+          callback={(dir) => handleSortChange(dir)}
+        />
+      </p>
       <Select
         options={options}
         onChange={(e: any) => setLocation(e.value)}

@@ -22,10 +22,9 @@ export interface BikepackingEvent {
 }
 
 // TODO: refresh events in background - load localstorage and then get new events... avoid repaint though - maybe just refresh button?
-// TODO: ability to sort by filter category
 // TODO: next/prev button - just returns that page's set of events
 // TODO: mobile screen styles
-// TODO: bug in price filter
+// TOOD: better loading
 const App = () => {
   const [events, setEvents] = useState<BikepackingEvent[]>([]);
   const [filteredDistanceEvents, setFilteredDistanceEvents] = useState<
