@@ -21,7 +21,6 @@ export interface BikepackingEvent {
   detail: string;
 }
 
-// TODO: refresh events in background - load localstorage and then get new events... avoid repaint though - maybe just refresh button?
 // TODO: next/prev button - just returns that page's set of events
 // TODO: mobile screen styles
 // TOOD: better loading
@@ -197,6 +196,11 @@ const App = () => {
           sortCallback={(filter) => handleGroupSort(filter)}
           refreshSort={refreshCategorySort}
         />
+      </div>
+      <div className='refresh-button-wrapper'>
+        <button className='refresh-button' onClick={getBikepackingEvents}>
+          refresh
+        </button>
       </div>
       <div className='events'>
         {loading ? (

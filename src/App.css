@@ -60,7 +60,6 @@
 .filters {
   margin-left: 10vh;
   margin-right: 10vh;
-  margin-bottom: 5vh;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -83,4 +82,25 @@
 .filter-emoji {
   margin-left: 20px;
   cursor: pointer;
+}
+
+.refresh-button-wrapper {
+  text-align: center;
+  margin-top: 2vh;
+  margin-bottom: 3vh;
+}
+
+.refresh-button {
+  font-size: calc(1px + 2vmin);
+  background-color: #282c34;
+  border: 2px solid white;
+  color: white;
+  width: 15vw;
+  height: 5vh;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.refresh-button:hover {
+  background-color: #373c47;
 }
