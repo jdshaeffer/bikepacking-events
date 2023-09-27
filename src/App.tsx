@@ -21,7 +21,7 @@ export interface BikepackingEvent {
   detail: string;
 }
 
-// TODO: next/prev button - just returns that page's set of events
+// TODO: next/prev button - currently is just returning the first page's events
 // TODO: mobile screen styles
 // TOOD: better loading
 const App = () => {
