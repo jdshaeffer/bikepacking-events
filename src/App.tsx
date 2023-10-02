@@ -23,7 +23,6 @@ export interface BikepackingEvent {
 
 // TODO: next/prev button - currently is just returning the first page's events
 // TODO: mobile screen styles
-// TOOD: better loading
 const App = () => {
   const [events, setEvents] = useState<BikepackingEvent[]>([]);
   const [filteredDistanceEvents, setFilteredDistanceEvents] = useState<
@@ -43,20 +42,12 @@ const App = () => {
   >(new Set());
   const [filteredEvents, setFilteredEvents] = useState<BikepackingEvent[]>([]);
   const [loading, setLoading] = useState(false);
-  const [waitingStr, setWaitingStr] = useState('...');
+  const [loadingStr, setLoadingStr] = useState('loading');
   const [refreshDistanceSort, setRefreshDistanceSort] = useState(false);
   const [refreshLocationSort, setRefreshLocationSort] = useState(false);
   const [refreshDateSort, setRefreshDateSort] = useState(false);
   const [refreshPriceSort, setRefreshPriceSort] = useState(false);
   const [refreshCategorySort, setRefreshCategorySort] = useState(false);
-
-  useEffect(() => {
-    if (loading) {
-      setInterval(() => {
-        setWaitingStr(waitingStr + '.');
-      }, 500);
-    }
-  });
 
   useEffect(() => {
     if (localStorage.getItem('events')) {
@@ -72,6 +63,38 @@ const App = () => {
       getBikepackingEvents();
     }
   }, []);
+
+  // loading string animation
+  useEffect(() => {
+    let i = 0;
+    let upper = true;
+    const interval = setInterval(() => {
+      setLoadingStr((l) => {
+        if (upper) {
+          l =
+            l.substring(0, i) +
+            l[i].toUpperCase() +
+            l.substring(i + 1, l.length);
+        } else {
+          l =
+            l.substring(0, i) +
+            l[i].toLowerCase() +
+            l.substring(i + 1, l.length);
+        }
+        i++;
+        if (i === l.length) {
+          if (l[l.length - 1] === 'G') {
+            upper = false;
+          } else {
+            upper = true;
+          }
+          i = 0;
+        }
+        return l;
+      });
+    }, 100);
+    return () => clearInterval(interval);
+  }, [loading]);
 
   // combine the intersection of all the filtered events
   useEffect(() => {
@@ -198,13 +221,20 @@ const App = () => {
         />
       </div>
       <div className='refresh-button-wrapper'>
-        <button className='refresh-button' onClick={getBikepackingEvents}>
+        <button
+          className='refresh-button'
+          onClick={
+            loading
+              ? () => console.log('yo, wait for events to load')
+              : getBikepackingEvents
+          }
+        >
           refresh
         </button>
       </div>
       <div className='events'>
         {loading ? (
-          <p>loading events from bikepacking.com{waitingStr}</p>
+          <p>{loadingStr} events from bikepacking.com</p>
         ) : filteredEvents ? (
           filteredEvents.map((event) => (
             <a key={event.eventUrl} className='link' href={event.eventUrl}>
