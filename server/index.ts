@@ -18,7 +18,9 @@ app.get('/api/events', async (req, res) => {
       headless: 'new',
     });
     const page = await browser.newPage();
-    await page.goto('https://bikepacking.com/events');
+    await page.goto('https://bikepacking.com/events', {
+      waitUntil: 'domcontentloaded',
+    });
 
     const eventsHTML = await page.evaluate(() =>
       Array.from(

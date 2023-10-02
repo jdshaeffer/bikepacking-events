@@ -50,7 +50,9 @@ app.get('/api/events', (req, res) => __awaiter(void 0, void 0, void 0, function*
             headless: 'new',
         });
         const page = yield browser.newPage();
-        yield page.goto('https://bikepacking.com/events');
+        yield page.goto('https://bikepacking.com/events', {
+            waitUntil: 'domcontentloaded',
+        });
         const eventsHTML = yield page.evaluate(() => Array.from(document.querySelectorAll('div[id^="post-"]'), (e) => e.innerHTML));
         const events = eventsHTML.map((event) => {
             const $ = cheerio.load(event);
