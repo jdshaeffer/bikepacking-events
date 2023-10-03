@@ -20,6 +20,13 @@
   margin-right: 20vh;
 }
 
+@media screen and (max-width: 1000px) {
+  .events {
+    margin-left: 5vh;
+    margin-right: 5vh;
+  }
+}
+
 .event {
   padding: 10px;
   border: 2px solid white;
@@ -72,6 +79,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(1px + 2vmin);
+  width: 300px;
 }
 
 .emoji {
@@ -103,4 +111,25 @@
 
 .refresh-button:hover {
   background-color: #373c47;
+}
+
+@media screen and (max-width: 700px) {
+  .filters {
+    margin-left: 5vh;
+    margin-right: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* .filter {
+    width: 100%
+  } */
+
+  .refresh-button {
+    margin-left: 5vh;
+    margin-right: 5vh;
+    width: 80vw;
+  }
 }
