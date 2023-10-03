@@ -22,7 +22,6 @@ export interface BikepackingEvent {
 }
 
 // TODO: next/prev button - currently is just returning the first page's events
-// TODO: mobile screen styles
 const App = () => {
   const [events, setEvents] = useState<BikepackingEvent[]>([]);
   const [filteredDistanceEvents, setFilteredDistanceEvents] = useState<
