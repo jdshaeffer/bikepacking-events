@@ -75,7 +75,6 @@ const DateFilter = ({
       hours = `0${hours}`;
     }
     const dateString = `${year}/${month}/${day} ${hours}:00:00`;
-    console.log(dateString);
     return new Date(dateString);
   };
 
@@ -84,9 +83,6 @@ const DateFilter = ({
     if (d.getFullYear() === 2001) {
       d.setFullYear(thisYear);
     }
-    console.log('event title:', event.title);
-    console.log('event date:', event.date);
-    console.log('d:', d);
     return d;
   };
 
