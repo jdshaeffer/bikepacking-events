@@ -90,6 +90,7 @@
 .filter-emoji {
   margin-left: 20px;
   cursor: pointer;
+  font-size: 20px;
 }
 
 .refresh-button-wrapper {
