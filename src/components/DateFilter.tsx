@@ -21,6 +21,21 @@ const options = [
   { value: 'dec', label: 'december' },
 ];
 
+const monthMap = {
+  January: '01',
+  February: '02',
+  March: '03',
+  April: '04',
+  May: '05',
+  June: '06',
+  July: '07',
+  August: '08',
+  September: '09',
+  October: '10',
+  November: '11',
+  December: '12',
+};
+
 const thisYear = new Date().getFullYear();
 
 // TODO: assign value as a defaultOption prop to be passed in from local storage
@@ -40,7 +55,8 @@ const DateFilter = ({
 
   const getParsedDateFromString = (date: string) => {
     const dateList = date.split(' ');
-    const month = dateList[0];
+    //@ts-ignore
+    const month = monthMap[dateList[0]];
     const day = +dateList[1].split(',')[0];
     let yearStr = dateList[2];
     let year = +yearStr;
@@ -55,6 +71,8 @@ const DateFilter = ({
     if (ampm === 'pm') {
       //@ts-ignore
       hours = parseInt(hours, 10) + 12;
+    } else if (ampm === 'am') {
+      hours = `0${hours}`;
     }
     const dateString = `${year}/${month}/${day} ${hours}:00:00`;
     console.log(dateString);
