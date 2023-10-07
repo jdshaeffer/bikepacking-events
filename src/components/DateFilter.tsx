@@ -43,6 +43,10 @@ const DateFilter = ({
     if (d.getFullYear() === 2001) {
       d.setFullYear(thisYear);
     }
+    console.log('------------------');
+    console.log('event:', event.title);
+    console.log('thisYear:', thisYear);
+    console.log('d:', d);
     return d;
   };
 
@@ -53,8 +57,10 @@ const DateFilter = ({
         const dateA = getDate(eventA);
         const dateB = getDate(eventB);
         if (sortDir === '⬆') {
+          console.log('sorting asc');
           return +dateA - +dateB;
         } else {
+          console.log('sorting desc');
           return +dateB - +dateA;
         }
       });
