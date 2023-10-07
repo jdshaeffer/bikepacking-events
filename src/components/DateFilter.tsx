@@ -38,14 +38,36 @@ const DateFilter = ({
     setSortDir(dir);
   };
 
+  const getParsedDateFromString = (date: string) => {
+    const dateList = date.split(' ');
+    const month = dateList[0];
+    const day = +dateList[1].split(',')[0];
+    let yearStr = dateList[2];
+    let year = +yearStr;
+    if (yearStr === '@') {
+      year = thisYear;
+    }
+    const ampm = dateList.pop();
+    let hours = dateList.pop()!.split(':')[0];
+    if (hours === '12') {
+      hours = '00';
+    }
+    if (ampm === 'pm') {
+      //@ts-ignore
+      hours = parseInt(hours, 10) + 12;
+    }
+    const dateString = `${year}/${month}/${day} ${hours}:00:00`;
+    console.log(dateString);
+    return new Date(dateString);
+  };
+
   const getDate = (event: BikepackingEvent) => {
-    const d = new Date(event.date);
+    const d = getParsedDateFromString(event.date);
     if (d.getFullYear() === 2001) {
       d.setFullYear(thisYear);
     }
-    console.log('------------------');
-    console.log('event:', event.title);
-    console.log('thisYear:', thisYear);
+    console.log('event title:', event.title);
+    console.log('event date:', event.date);
     console.log('d:', d);
     return d;
   };
@@ -57,10 +79,8 @@ const DateFilter = ({
         const dateA = getDate(eventA);
         const dateB = getDate(eventB);
         if (sortDir === '⬆') {
-          console.log('sorting asc');
           return +dateA - +dateB;
         } else {
-          console.log('sorting desc');
           return +dateB - +dateA;
         }
       });
