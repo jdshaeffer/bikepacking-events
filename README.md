@@ -9,7 +9,6 @@
 - webscraping https://bikepacking.com/events/ with puppeteer from a simple node/express server in my linode box
 - `yarn start` for dev (it's just a create react app)
 - push to master will trigger a gh action workflow that runs a pre-deploy and the gh-pages build
-- github's settings/pages - gh-pages branch is being served from / (root)
 
 ## other stuff:
 
