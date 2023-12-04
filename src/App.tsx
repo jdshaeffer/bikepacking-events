@@ -233,7 +233,10 @@ const App = () => {
       </div>
       <div className='events'>
         {loading ? (
-          <p>{loadingStr} events from bikepacking.com</p>
+          <p>
+            {loadingStr} events from{' '}
+            <a href='https://bikepacking.com/events/'>bikepacking.com</a>
+          </p>
         ) : filteredEvents ? (
           filteredEvents.map((event) => (
             <a key={event.eventUrl} className='link' href={event.eventUrl}>
