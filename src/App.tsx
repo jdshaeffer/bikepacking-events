@@ -235,7 +235,9 @@ const App = () => {
         {loading ? (
           <p>
             {loadingStr} events from{' '}
-            <a href='https://bikepacking.com/events/'>bikepacking.com</a>
+            <a href='https://bikepacking.com/events/' style={{ color: 'cyan' }}>
+              bikepacking.com
+            </a>
           </p>
         ) : filteredEvents ? (
           filteredEvents.map((event) => (
